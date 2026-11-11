@@ -1,6 +1,6 @@
 {
   "name": "yingce-mcp",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "MCP client for 影策 (Yingce) — images, videos, short drama and canvas tools over a self-hosted gateway.",
   "type": "module",
   "bin": {

@@ -69,6 +69,19 @@ env = { YINGCE_BASE_URL = "http://152.136.42.128:3000", YINGCE_TOKEN = "mcp_xxx"
 | `yingce_drama_set_cast_image` | 把图片设为角色形象（短剧回填的正确入口） | drama |
 | `yingce_canvas_share` | 查看 / 创建 / 撤销画布分享链接 | canvas |
 | `yingce_canvas_arrange` | 按网格重排画布节点 | canvas |
+| `yingce_creative_api` | 创作域通用接口，覆盖长尾（见下） | creative |
+
+### 创作域通用接口
+
+`yingce_creative_api` 接受 `method` + `path`（+ 可选 `body`），用于覆盖没有单独工具的接口。允许的路径前缀：
+
+```
+/projects /dramas /canvas-projects /tasks /assets /asset-folders /resources
+/videos /video /audio /characters /style-profiles /timeline /agent /tools
+/skills /creation-runs /ecommerce /inspiration-feed /pose-library /workbench
+```
+
+其他前缀（`/admin`、`/auth`、`/wallet`、`/payments`、`/announcements` 等）会被直接拒绝。`DELETE` 必须显式传 `confirm: true`。
 
 ## 安全说明
 
