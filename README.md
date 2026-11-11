@@ -21,10 +21,11 @@ update mcp_tokens set revoked_at = now() where id = 'MCP_xxxxxxxx';
 ## 安装
 
 ```bash
-npx yingce-mcp --check     # 发布到 npm 后
-# 或直接从仓库安装
-npx github:<owner>/yingce-mcp --check
+npx -y github:peipeijiang/yingce-mcp --check
 ```
+
+尚未发布到 npm，所以 `npx yingce-mcp` 目前不可用；也可以直接从发布页下载 tarball 安装：
+`npm install -g https://github.com/peipeijiang/yingce-mcp/releases/download/v0.4.0/yingce-mcp-0.4.0.tgz`。
 
 ## 配置
 
@@ -70,6 +71,17 @@ env = { YINGCE_BASE_URL = "http://152.136.42.128:3000", YINGCE_TOKEN = "mcp_xxx"
 | `yingce_canvas_arrange` | 按网格重排画布节点 | canvas |
 
 ## 安全说明
+
+### 重复提交保护
+
+- `yingce_submit_image` 与 `yingce_submit_video` 都支持 `idempotencyKey`：同一个 key 在 15 分钟内只提交一次，重复调用返回原任务并带 `deduped: true`。
+- 不传 key 时按“项目 + 提示词 + 参数”的内容哈希去重，同样的请求重复发送也会命中缓存。
+- 需要故意再下一单（例如重跑同一提示词）时传 `allowDuplicate: true`。
+- 去重表在网关进程内存里，重启后清空；跨重启的强幂等需要显式传 key 并配合业务侧核对。
+
+### 角色形象重排
+
+`yingce_drama_set_cast_image` 的 `restyleSegments: true` 会重排该角色出场的所有剧情段，可能触发批量重渲染。必须同时传 `confirmRestyle: true`，否则直接拒绝。
 
 - 令牌只属于一个账号，服务端按令牌解析身份，工具参数里没有 userId，无法跨账号访问。
 - 服务端把令牌换成两小时的短会话，过期自动续。
